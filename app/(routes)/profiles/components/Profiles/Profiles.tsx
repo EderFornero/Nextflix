@@ -6,6 +6,7 @@ import { AddProfile } from './AddProfile'
 
 
 export function Profiles(props: ProfilesProps) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { users } = props
     return (
         <div>
