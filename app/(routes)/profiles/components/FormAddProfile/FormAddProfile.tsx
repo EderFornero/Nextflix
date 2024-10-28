@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
+    //FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -23,9 +23,10 @@ import { FormAddProfileProps } from "./FormAddProfile.types";
 import { formSchema } from "./FormAddProfile.form"
 import { dataProfileImages } from "./FormAddProfile.data"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
+// import { useRouter } from "next/navigation"
 import { useState } from "react"
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function FormAddProfile(props: FormAddProfileProps) {
 
 
@@ -43,8 +44,9 @@ export function FormAddProfile(props: FormAddProfileProps) {
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         console.log(values)
     }
-    const { setOpen } = props
-    const router = useRouter()
+    // const { setOpen } = props
+    // const router = useRouter()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isLoading, setIsLoading] = useState(false)
 
     return (
