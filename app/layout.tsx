@@ -15,7 +15,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Netflix Clone - Eder",
+  title: "NEXTFLIX",
   description: "An amazing Netflix Clone built with Next.js and Tailwind CSS",
 };
 

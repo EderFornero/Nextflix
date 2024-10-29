@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-
+import axios from 'axios'
 
 
 import { FormAddProfileProps } from "./FormAddProfile.types";
@@ -25,10 +25,16 @@ import { dataProfileImages } from "./FormAddProfile.data"
 import Image from "next/image"
 // import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { toast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
+
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function FormAddProfile(props: FormAddProfileProps) {
 
+    const { setOpen } = props
+    const router = useRouter()
+    const [isLoading, setIsLoading] = useState(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -41,13 +47,26 @@ export function FormAddProfile(props: FormAddProfileProps) {
 
 
     // 2. Define a submit handler.
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+            setIsLoading(true)
+
+            const res = await axios.post("/api/auth/userNextflix", values)
+            if (res.status !== 200) {
+                toast({ title: "Ops! Something went wrong", variant: "destructive" })
+            } else {
+                toast({ title: "Profile created successfully", variant: "newVariant" })
+            }
+
+            router.refresh()
+            setOpen(false)
+
+        } catch (error) {
+            toast({ title: "Ops! Something went wrong", variant: "destructive" })
+            setIsLoading(false)
+            throw error
+        }
     }
-    // const { setOpen } = props
-    // const router = useRouter()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [isLoading, setIsLoading] = useState(false)
 
     return (
         <Form {...form}>
