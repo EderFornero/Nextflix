@@ -21,6 +21,8 @@ import { toast } from '@/hooks/use-toast'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useCurrentUserNextflix } from '@/hooks/use-current-user'
+import { UserNextflix } from '@prisma/client'
 
 
 export function Profiles(props: ProfilesProps) {
@@ -29,6 +31,14 @@ export function Profiles(props: ProfilesProps) {
     const [currentPage, setCurrentPage] = useState(0)
     const profilesPerPage = 2
     const router = useRouter()
+    const { changeCurrentUser } = useCurrentUserNextflix()
+
+
+    const onClickUser = (user: UserNextflix) => {
+        changeCurrentUser(user)
+        router.push("/")
+    }
+
 
     const deleteUser = async (userIdNextflix: string) => {
         try {
@@ -55,10 +65,6 @@ export function Profiles(props: ProfilesProps) {
     const startIndex = currentPage * profilesPerPage
     const currentProfiles = users.slice(startIndex, startIndex + profilesPerPage)
 
-    console.log("pages quantity", pages)
-    console.log("profiles", currentProfiles)
-    console.log("current page", currentPage)
-
     return (
         <div className='max-w-full overflow-visible relative'>
 
@@ -75,7 +81,11 @@ export function Profiles(props: ProfilesProps) {
 
 
                 {currentProfiles.map((user) => (
-                    <div key={user.id} className='text-center relative cursor-pointer'>
+                    <div
+                        key={user.id}
+                        className='text-center relative cursor-pointer'
+                        onClick={() => onClickUser(user)}
+                    >
                         <div className='flex items-center justify-center gap-4'>
                             <div>
                                 <Image
