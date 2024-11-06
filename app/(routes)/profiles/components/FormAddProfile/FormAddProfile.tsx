@@ -29,7 +29,7 @@ import { toast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export function FormAddProfile(props: FormAddProfileProps) {
 
     const { setOpen } = props
@@ -46,23 +46,37 @@ export function FormAddProfile(props: FormAddProfileProps) {
 
 
 
-    // 2. Define a submit handler.
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             setIsLoading(true)
 
             const res = await axios.post("/api/auth/userNextflix", values)
+
             if (res.status !== 200) {
                 toast({ title: "Ops! Something went wrong", variant: "destructive" })
-            } else {
-                toast({ title: "Profile created successfully", variant: "newVariant" })
             }
 
-            router.refresh()
-            setOpen(false)
+            else {
+                toast({ title: "Profile created successfully", variant: "newVariant" })
+                window.location.reload()
+                router.refresh()
+                setOpen(false)
+            }
+
+            setIsLoading(false)
 
         } catch (error) {
-            toast({ title: "Ops! Something went wrong", variant: "destructive" })
+            if (axios.isAxiosError(error)) {
+                if (error.response && error.response.status === 406) {
+                    toast({ title: "You can only have 4 profiles", variant: "destructive" })
+                } else {
+                    toast({ title: "Ops! Something went wrong", variant: "destructive" })
+                }
+            } else {
+                toast({ title: "Unknown error occurred", variant: "destructive" })
+            }
+
             setIsLoading(false)
             throw error
         }
