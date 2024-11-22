@@ -40,16 +40,19 @@ function LoginForm() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            login(values).then((res) => {
-                setError(res?.error)
-                if (res?.success) {
-                    toast({
-                        title: "Logged in successfully",
-                        duration: 3000,
-                    })
-                }
-            })
-            router.push("/profiles")
+            const res = await login(values);
+
+            setError(res?.error);
+
+            if (res?.success && res.callbackUrl) {
+                toast({
+                    title: "Logged in successfully",
+                    duration: 3000,
+                    variant: "newVariant"
+                });
+
+                router.push(res.callbackUrl);
+            }
         } catch (error) {
             console.log(error)
         }
